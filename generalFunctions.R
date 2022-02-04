@@ -50,16 +50,16 @@ rm_accent <- function(str,#this one function is not mine
   
   pattern <- unique(pattern)
   
-  if(any(pattern=="Ç"))
-    pattern[pattern=="Ç"] <- "ç"
+  if(any(pattern=="Ã‡"))
+    pattern[pattern=="Ã‡"] <- "Ã§"
   
   symbols <- c(
-    acute = "áéíóúÁÉÍÓÚıİ",
-    grave = "àèìòùÀÈÌÒÙ",
-    circunflex = "âêîôûÂÊÎÔÛ",
-    tilde = "ãõÃÕñÑ",
-    umlaut = "äëïöüÄËÏÖÜÿ",
-    cedil = "çÇ"
+    acute = "Ã¡Ã©Ã­Ã³ÃºÃÃ‰ÃÃ“ÃšÃ½Ã",
+    grave = "Ã Ã¨Ã¬Ã²Ã¹Ã€ÃˆÃŒÃ’Ã™",
+    circunflex = "Ã¢ÃªÃ®Ã´Ã»Ã‚ÃŠÃÃ”Ã›",
+    tilde = "Ã£ÃµÃƒÃ•Ã±Ã‘",
+    umlaut = "Ã¤Ã«Ã¯Ã¶Ã¼Ã„Ã‹ÃÃ–ÃœÃ¿",
+    cedil = "Ã§Ã‡"
   )
   
   nudeSymbols <- c(
@@ -71,7 +71,7 @@ rm_accent <- function(str,#this one function is not mine
     cedil = "cC"
   )
   
-  accentTypes <- c("´","`","^","~","¨","ç")
+  accentTypes <- c("Â´","`","^","~","Â¨","Ã§")
   
   if(any(c("all","al","a","todos","t","to","tod","todo")%in%pattern)) # opcao retirar todos
     return(chartr(paste(symbols, collapse=""),
@@ -168,4 +168,22 @@ open_packages <- function(myPackages = NULL){
   
   return(NULL)
 }
-open_packages(myPackages = c("dplyr", "RColorBrewer"))
+
+daf_gathererMEC = function(daf, variables, except_var){
+  if(!is.numeric(variables))
+    stop("variables must be numerical representative")
+  
+  if(except_var %in% colnames(daf))
+    aa = which(colnames(daf) %in% except_var)
+  
+  aa = which(variables %in% aa)
+  if(length(aa) > 0)
+    variables = variables[-aa]
+  
+  gathered = gather(data = daf,
+                    key = "Setor",
+                    value = "Value",
+                    variables)
+  gathered = gathered[,c(except_var, "Setor", "Value")]
+  return(gathered)
+}
